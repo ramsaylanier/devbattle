@@ -1,0 +1,99 @@
+<head>
+  <title>devbattle</title>
+</head>
+
+<body>
+
+	{{> yield}}
+
+</body>
+
+<template name="layout">
+	{{> loginButtons}}
+
+	{{#if currentUser}}
+	 	{{> createPost}}
+	 	{{> postsList}}
+
+ 	{{else }}
+ 		<p>You must login to view/make posts</p>
+ 	{{/if}}
+</template>
+
+
+<template name="createPost">
+	<form>
+		<div class="form-control">
+			<label for="post-title">Post title: </label>
+			<input type="text" name="post-title" class="post-title"/>
+		</div>
+		<div class="form-control">
+			<label for="post-title">Post content: </label>
+			<textarea name="post-content" class="post-content"></textarea>
+		</div>
+
+		<input type="submit">
+	</form>
+</template>
+
+<template name="postsList">
+{{#if posts}}
+	{{#each posts}}
+		{{>postListSingle}}
+	{{/each}}
+{{else}}
+	<p>There are no posts</p>
+{{/if}}
+</template>
+
+<template name="postListSingle">
+	<h3><a href="{{pathFor 'postView'}}">{{postTitle}}</a></h3>
+
+	{{#if ownsPost}}
+		<button class="delete-post-btn">Delete Post</button>
+	{{/if}}
+</template>
+
+<template name="postView">
+	{{#if ownsPost}}
+		<button class="edit-post-btn">Edit Post</button>
+	{{/if}}
+	<h1 class="post-title">{{postTitle}}</h1>
+	<p class="post-content">{{postContent}}</p>
+
+	{{> createComment}}
+
+	{{#if comments}}
+		{{#each comments}}
+			{{> commentSingle}}
+		{{/each}}
+	{{else}}
+		<p>no comments yet</p>
+	{{/if}}
+</template>
+
+<template name="createComment">
+	<form>
+		<label>Leave Comments: </label>
+		<textarea class="post-comment"></textarea>
+
+		<input type="submit" value="post comment"/>
+	</form>
+</template>
+
+
+<template name="commentSingle">
+	<p class="comment" id="comment-{{this._id}}">{{comment}}</p>
+
+	{{#if ownsComment}}
+		<button class="edit-comment-btn">Edit Comment</button>
+	{{/if}}
+
+	{{#if deleteable}}
+		<button class="delete-comment-btn">Delete Comment</button>
+	{{/if}}
+</template>
+
+
+
+
